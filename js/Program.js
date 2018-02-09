@@ -7,6 +7,7 @@ const Program = function(gl, vertexShader, fragmentShader) {
   gl.attachShader(this.glProgram, fragmentShader.glShader);
 
   gl.bindAttribLocation(this.glProgram, 0, 'vertexPosition');
+  gl.bindAttribLocation(this.glProgram, 1, 'vertexColor');
 
   gl.linkProgram(this.glProgram);
   if (!gl.getProgramParameter(this.glProgram, gl.LINK_STATUS)) {
