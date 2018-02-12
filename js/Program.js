@@ -8,6 +8,7 @@ const Program = function(gl, vertexShader, fragmentShader) {
 
   gl.bindAttribLocation(this.glProgram, 0, 'vertexPosition');
   gl.bindAttribLocation(this.glProgram, 1, 'vertexColor');
+  gl.bindAttribLocation(this.glProgram, 2, 'trianglePosition');
 
   gl.linkProgram(this.glProgram);
   if (!gl.getProgramParameter(this.glProgram, gl.LINK_STATUS)) {

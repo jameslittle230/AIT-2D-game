@@ -6,6 +6,7 @@ const Scene = function(gl) {
   this.triangleGeometry = new TriangleGeometry(gl);
 
   this.timeAtLastFrame = new Date().getTime();
+  this.trianglePosition = {x: 0, y: 0, z: 0};
 
 };
 
@@ -15,6 +16,15 @@ Scene.prototype.update = function(gl, keysPressed) {
   const timeAtThisFrame = new Date().getTime();
   const dt = (timeAtThisFrame - this.timeAtLastFrame) / 1000.0;
   this.timeAtLastFrame = timeAtThisFrame;
+  this.trianglePosition.x += 0.008;
+
+  const trianglePositionLocation = gl.getUniformLocation(this.solidProgram.glProgram, "trianglePosition"); 
+  
+  if(trianglePositionLocation < 0) {
+    console.log("Could not find uniform: trianglePosition."); 
+  } else {
+    gl.uniform3f(trianglePositionLocation, this.trianglePosition.x, this.trianglePosition.y, this.trianglePosition.z); 
+  }
 
   // clear the screen
   gl.clearColor(0.3, 0.0, 0.3, 1.0);
