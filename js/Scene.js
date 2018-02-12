@@ -16,7 +16,8 @@ Scene.prototype.update = function(gl, keysPressed) {
   const timeAtThisFrame = new Date().getTime();
   const dt = (timeAtThisFrame - this.timeAtLastFrame) / 1000.0;
   this.timeAtLastFrame = timeAtThisFrame;
-  this.trianglePosition.x += 0.008;
+  
+  this.trianglePosition.x += 0.5 * dt;
 
   const trianglePositionLocation = gl.getUniformLocation(this.solidProgram.glProgram, "trianglePosition"); 
   
