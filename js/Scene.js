@@ -34,6 +34,9 @@ Scene.prototype.update = function(gl, keysPressed) {
 
   this.solidProgram.commit();
   this.triangleGeometry.draw();
+
+  gl.uniform3f(trianglePositionLocation, -this.trianglePosition.x, this.trianglePosition.y, this.trianglePosition.z); 
+  this.triangleGeometry.draw();
 };
 
 
