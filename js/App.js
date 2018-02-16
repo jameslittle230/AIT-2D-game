@@ -28,11 +28,10 @@ App.prototype.resize = function() {
 App.prototype.registerEventHandlers = function() {
 	const theApp = this;
 	document.onkeydown = function(event) {
-		this.keysPressed.append(event.keyCode)
-		keyboardMap[event.keyCode] = true;
+		theApp.keysPressed[keyboardMap[event.keyCode]] = true;
 	};
 	document.onkeyup = function(event) {
-		keyboardMap[event.keyCode] = false;
+		theApp.keysPressed[keyboardMap[event.keyCode]] = false;
 	};
 	this.canvas.onmousedown = function(event) {
 		//jshint unused:false
@@ -61,6 +60,7 @@ App.prototype.update = function() {
 	const pendingResourceNames = Object.keys(this.gl.pendingResources);
 	if (pendingResourceNames.length === 0) {
 		// animate and draw scene
+		this.scene.keysPressed = this.keysPressed
 		this.scene.update(this.gl);
 		this.overlay.innerHTML = "Ready.";
 	} else {

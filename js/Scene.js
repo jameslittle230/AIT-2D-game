@@ -7,14 +7,13 @@ const Scene = function(gl) {
 
   this.timeAtLastFrame = new Date().getTime();
   this.trianglePosition = new Vec3(0, 1, 0);
-  this.trianglePosition2 = new Vec3(1, 0, 0);
+  this.trianglePosition2 = new Vec3(0, 0, 0);
   this.triangleScale = 0.5;
-  this.triangleScale2 = 0.8;
+  this.triangleScale2 = 0.3;
 
   this.transform = new Vec3(0.8, 0.25, 0);
-  this.transform2 = new Vec3(-0.3, -0.8, 0);
+  this.transform2 = new Vec3(0, 0, 0);
   this.frameCount = 0;
-
 };
 
 Scene.prototype.update = function(gl, keysPressed) {
@@ -27,6 +26,18 @@ Scene.prototype.update = function(gl, keysPressed) {
   
   this.trianglePosition.add(this.transform.times(dt));
   this.trianglePosition2.add(this.transform2.times(dt));
+
+  if(this.keysPressed.D === true) {
+    this.transform2.set(1, 0, 0);
+  } else if(this.keysPressed.W === true) {
+    this.transform2.set(0, 1, 0);
+  } else if(this.keysPressed.A === true) {
+    this.transform2.set(-1, 0, 0);
+  } else if(this.keysPressed.S === true) {
+    this.transform2.set(0, -1, 0);
+  } else {
+    this.transform2.set(0, 0, 0);
+  }
   // this.triangleScale = (Math.sin(this.frameCount / Math.PI / 10) + 1.5) * 0.08 + 0.5;
   // this.triangleScale2 = Math.cos(this.frameCount / Math.PI / 8);
 
