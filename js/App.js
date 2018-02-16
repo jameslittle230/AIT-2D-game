@@ -3,6 +3,7 @@
 const App = function(canvas, overlay) {
 	this.canvas = canvas;
 	this.overlay = overlay;
+	this.keysPressed = [];
 
 	// if no GL support, cry
 	this.gl = canvas.getContext("experimental-webgl");
@@ -27,10 +28,11 @@ App.prototype.resize = function() {
 App.prototype.registerEventHandlers = function() {
 	const theApp = this;
 	document.onkeydown = function(event) {
-		//jshint unused:false
+		this.keysPressed.append(event.keyCode)
+		keyboardMap[event.keyCode] = true;
 	};
 	document.onkeyup = function(event) {
-		//jshint unused:false
+		keyboardMap[event.keyCode] = false;
 	};
 	this.canvas.onmousedown = function(event) {
 		//jshint unused:false
