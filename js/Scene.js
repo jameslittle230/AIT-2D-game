@@ -61,29 +61,35 @@ Scene.prototype.update = function(gl, keysPressed) {
 
   const trianglePositionLocation = gl.getUniformLocation(this.solidProgram.glProgram, "trianglePosition");
   const matrixLocation = gl.getUniformLocation(this.solidProgram.glProgram, "modelMatrix");
+  const brightnessLocation = gl.getUniformLocation(this.solidProgram.glProgram, "brightness");
 
   // Clear screen
   gl.clearColor(0.3, 0.0, 0.3, 1.0);
   gl.clearDepth(1.0);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  if(trianglePositionLocation < 0 || matrixLocation < 0) {
+  if(trianglePositionLocation < 0 || matrixLocation < 0 || brightnessLocation < 0) {
     console.log("Could not find uniform");
   } else {
-    const modelMatrix = new Mat4().rotate(this.rotation).scale(Math.pow(3, this.scale)).translate(this.trianglePosition);
+    const modelMatrix = new Mat4()
+      .rotate(this.rotation)
+      .scale(Math.pow(3, this.scale))
+      .translate(this.trianglePosition);
     this.trianglePosition.commit(gl, trianglePositionLocation);
     modelMatrix.commit(gl, matrixLocation);
+    gl.uniform1f(brightnessLocation, 1);
     this.solidProgram.commit();
     this.triangleGeometry.draw();
 
     for(var i=0; i<this.orbiters; i++) {
       const modelMatrix2 = new Mat4()
-        .rotate(timeAtThisFrame/700)
-        .scale(0.25)
-        .translate(0, 0.5, 0)
-        .rotate(2*Math.PI / this.orbiters * i + (timeAtThisFrame / 700))
-        .translate(this.trianglePosition);
+        .rotate(-timeAtThisFrame/1000) // Rotate each triangle individually
+        .scale(0.25) // Set scale of each triangle
+        .translate(0, 0.5, 0) // Move triangle away from origin
+        .rotate(2*Math.PI / this.orbiters * i + (timeAtThisFrame / 1400)) // Orbit triangle around center
+        .translate(this.trianglePosition); // Move origin to triangle position
       modelMatrix2.commit(gl, matrixLocation);
+      gl.uniform1f(brightnessLocation, Math.pow(3, this.scale));
       this.triangleGeometry.draw();
     }
   }
