@@ -62,7 +62,7 @@ App.prototype.update = function() {
 		// animate and draw scene
 		this.scene.keysPressed = this.keysPressed
 		this.scene.update(this.gl);
-		this.overlay.innerHTML = "Ready.";
+		// this.overlay.innerHTML = "Ready.";
 	} else {
 		this.overlay.innerHTML = "Loading: " + pendingResourceNames;
 	}
