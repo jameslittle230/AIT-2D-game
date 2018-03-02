@@ -3,7 +3,8 @@ const Scene = function(gl) {
   this.vsIdle = new Shader(gl, gl.VERTEX_SHADER, "idle_vs.essl");
   this.fsSolid = new Shader(gl, gl.FRAGMENT_SHADER, "solid_fs.essl");
   this.solidProgram = new Program(gl, this.vsIdle, this.fsSolid);
-  this.triangleGeometry = new TriangleGeometry(gl);
+  this.heartGeometry = new HeartGeometry(gl);
+  this.starGeometry = new StarGeometry(gl);
 
   this.timeAtLastFrame = new Date().getTime();
 
@@ -16,10 +17,10 @@ const Scene = function(gl) {
   this.gameObjects = [];
   this.camera = new OrthoCamera();
 
-  this.tri1 = new GameObject(new Mesh(this.triangleGeometry, this.material));
-  this.tri2 = new GameObject(new Mesh(this.triangleGeometry, this.material2));
-  this.gameObjects.push(this.tri1);
+  this.tri1 = new GameObject(new Mesh(this.heartGeometry, this.material));
+  this.tri2 = new GameObject(new Mesh(this.starGeometry, this.material2));
   this.gameObjects.push(this.tri2);
+  this.gameObjects.push(this.tri1);
 
   this.tri1.position.set(0.5, 0.5, 0);
   this.tri2.mesh.material.solidColor.set(172/225, 100/255, 227/255)
