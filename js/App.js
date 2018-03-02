@@ -23,6 +23,7 @@ App.prototype.resize = function() {
 	this.canvas.width = this.canvas.clientWidth;
 	this.canvas.height = this.canvas.clientHeight;
 	this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+	this.scene.camera.setAspectRatio( this.canvas.clientWidth / this.canvas.clientHeight );
 };
 
 App.prototype.registerEventHandlers = function() {

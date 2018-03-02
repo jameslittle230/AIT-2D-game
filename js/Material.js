@@ -6,15 +6,14 @@ const Material = function(gl, program) {
   Object.keys(program.uniforms).forEach(function(uniformName) { 
     const uniform = program.uniforms[uniformName]; 
     const reflectionVariable = 
-        UniformReflectionFactories.makeVar(gl,
-                                uniform.type, uniform.size); 
+        UniformReflectionFactories.makeVar(gl, uniform.type, uniform.size); 
     Object.defineProperty(theMaterial, uniformName,
 				{value: reflectionVariable} ); 
   });
 
   return new Proxy(this, {
     get : function(target, name){
-      if(!(name in target)){ 
+      if(!(name in target)){
         console.error("WARNING: Ignoring attempt to access material property '" +
             name + "'. Is '" + name + "' an unused uniform?" );
         return Material.dummy;
@@ -41,4 +40,8 @@ Material.dummy = new Proxy(new Function(), {
     apply: function(target, thisArg, args){ 
       return Material.dummy;
     },
+});
+
+Object.defineProperty(Material, "modelViewProjMatrix", {
+  value: new Mat4(),
 });

@@ -7,17 +7,22 @@ const Scene = function(gl) {
 
   this.timeAtLastFrame = new Date().getTime();
 
-  this.trianglePosition = new Vec3(0.2, 0.3, 0);
-  this.rotation = 0;
-  this.scale = -0.5;
-
-  Object.defineProperty(Material, "solidColor", {value: new Vec3()});
-
   this.material = new Material(gl, this.solidProgram);
   this.material.solidColor.set(0.2, 0.3, 0.8);
 
   this.material2 = new Material(gl, this.solidProgram);
-  this.material2.solidColor.set(0.7, 0.44, 0.3);
+  this.material2.solidColor.set(0.2, 0.3, 0.8);
+
+  this.gameObjects = [];
+  this.camera = new OrthoCamera();
+
+  this.tri1 = new GameObject(new Mesh(this.triangleGeometry, this.material));
+  this.tri2 = new GameObject(new Mesh(this.triangleGeometry, this.material2));
+  this.gameObjects.push(this.tri1);
+  this.gameObjects.push(this.tri2);
+
+  this.tri1.position.set(0.5, 0.5, 0);
+  this.tri2.mesh.material.solidColor.set(172/225, 100/255, 227/255)
 };
 
 Scene.prototype.update = function(gl, keysPressed) {
@@ -25,10 +30,10 @@ Scene.prototype.update = function(gl, keysPressed) {
   const dt = (timeAtThisFrame - this.timeAtLastFrame) / 1000.0;
   this.timeAtLastFrame = timeAtThisFrame;
 
-  if(this.keysPressed.W) { this.trianglePosition.add( 0,     1*dt, 0); }
-  if(this.keysPressed.A) { this.trianglePosition.add(-1*dt,  0,    0); }
-  if(this.keysPressed.S) { this.trianglePosition.add( 0,    -1*dt, 0); }
-  if(this.keysPressed.D) { this.trianglePosition.add( 1*dt,  0,    0); }
+  if(this.keysPressed.W) { this.tri1.position.add( 0,     1*dt, 0); }
+  if(this.keysPressed.A) { this.tri1.position.add(-1*dt,  0,    0); }
+  if(this.keysPressed.S) { this.tri1.position.add( 0,    -1*dt, 0); }
+  if(this.keysPressed.D) { this.tri1.position.add( 1*dt,  0,    0); }
   if(this.keysPressed.Q) { this.rotation += 1*dt; }
   if(this.keysPressed.E) { this.rotation += -1*dt; }
   if(this.keysPressed.Z) { this.scale += -1*dt; }
@@ -38,29 +43,16 @@ Scene.prototype.update = function(gl, keysPressed) {
   const matrixLocation = gl.getUniformLocation(this.solidProgram.glProgram, "modelMatrix");
 
   // Clear screen
-  gl.clearColor(1, 0.62, 0.94, 1.0);
+  gl.clearColor(100/255, 227/255, 117/255, 1.0);
   gl.clearDepth(1.0);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
   if(trianglePositionLocation < 0 || matrixLocation < 0) {
     console.log("Could not find uniform");
   } else {
-    var modelMatrix = new Mat4()
-      .rotate(this.rotation)
-      .scale(Math.pow(3, this.scale))
-      .translate(this.trianglePosition);
-    this.material.commit(); // this has to be before the matrix.commit line: https://stackoverflow.com/a/14416423/3841018
-    modelMatrix.commit(gl, matrixLocation);
-    this.triangleGeometry.draw();
-
-    modelMatrix = new Mat4()
-      .rotate(this.rotation)
-      .scale(Math.pow(3, this.scale))
-      .translate(this.trianglePosition)
-      .translate(0.3, 0.3);
-    this.material2.commit()
-    modelMatrix.commit(gl, matrixLocation);
-    this.triangleGeometry.draw();
+    this.gameObjects.forEach(gameObj => {
+      gameObj.draw();
+    });
   }
 };
 

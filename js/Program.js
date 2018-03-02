@@ -8,8 +8,8 @@ const Program = function(gl, vertexShader, fragmentShader) {
 
   gl.bindAttribLocation(this.glProgram, 0, 'vertexPosition');
   gl.bindAttribLocation(this.glProgram, 1, 'vertexColor');
-  gl.bindAttribLocation(this.glProgram, 2, 'modelMatrix');
-  gl.bindAttribLocation(this.glProgram, 3, 'brightness');
+  gl.bindAttribLocation(this.glProgram, 2, 'modelViewProjMatrix');
+  // gl.bindAttribLocation(this.glProgram, 3, 'brightness');
 
   gl.linkProgram(this.glProgram);
   if (!gl.getProgramParameter(this.glProgram, gl.LINK_STATUS)) {
