@@ -1,20 +1,25 @@
 "use strict"; 
-const GameObject = function(mesh) { 
+const GameObject = function(mesh) {
     this.mesh = mesh;
 
     this.position = new Vec3(0, 0, 0);
     this.orientation = 0;
-    this.scale = new Vec3(1, 1, 0);
+    this.scale = new Vec3(0.4, 0.4, 0);
+    this.isSelected = false;
 
     this.modelMatrix = new Mat4();
 };
 
 GameObject.prototype.updateModelMatrix = function(){
-    // console.log(this.position)
     this.modelMatrix.set()
         .rotate(this.orientation)
         .scale(this.scale)
-        .translate(this.position);
+
+    if(this.isSelected) {
+        this.modelMatrix.scale(1.3, 1.3);
+    }
+
+    this.modelMatrix.translate(this.position);
 };
 
 GameObject.prototype.draw = function(camera){

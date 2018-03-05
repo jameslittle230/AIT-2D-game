@@ -8,9 +8,35 @@
 </head>
 <body>
 	<div id="container">
+		<div class="hbar"></div>
+		<div class="vbar"></div>
 	  <canvas id="canvas"></canvas>
 	  <div id="overlay"></div>
 	</div>
+
+	<style>
+
+		.hbar, .vbar {
+			position: absolute;
+			top: 0;
+			left: 0;
+			height: 100%;
+			width: 100%;
+			background: red;
+			z-index: 12;
+		}
+
+		.hbar {
+			width: 1px;
+			left: 50vw;
+		}
+
+		.vbar {
+			height: 1px;
+			top: 50vh;
+		}
+
+	</style>
 
 	<!-- is this why god invented webpack -->
 	

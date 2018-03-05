@@ -23,7 +23,7 @@ App.prototype.resize = function() {
 	this.canvas.width = this.canvas.clientWidth;
 	this.canvas.height = this.canvas.clientHeight;
 	this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
-	this.scene.camera.setAspectRatio( this.canvas.clientWidth / this.canvas.clientHeight );
+	this.scene.camera.setAspectRatio(this.canvas.clientWidth / this.canvas.clientHeight);
 };
 
 App.prototype.registerEventHandlers = function() {
@@ -35,7 +35,10 @@ App.prototype.registerEventHandlers = function() {
 		theApp.keysPressed[keyboardMap[event.keyCode]] = false;
 	};
 	this.canvas.onmousedown = function(event) {
-		//jshint unused:false
+		var x = (event.x / theApp.canvas.width - 0.5) * 2;
+		var y = (event.y / theApp.canvas.height - 0.5) * -2;
+
+		theApp.scene.click(x, y);
 	};
 	this.canvas.onmousemove = function(event) {
 		//jshint unused:false
