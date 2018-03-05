@@ -12,6 +12,8 @@ const GameObject = function(mesh) {
 GameObject.prototype.updateModelMatrix = function(){
     // console.log(this.position)
     this.modelMatrix.set()
+        .rotate(this.orientation)
+        .scale(this.scale)
         .translate(this.position);
 };
 

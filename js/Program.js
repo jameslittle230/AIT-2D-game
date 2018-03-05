@@ -6,9 +6,10 @@ const Program = function(gl, vertexShader, fragmentShader) {
   gl.attachShader(this.glProgram, vertexShader.glShader);
   gl.attachShader(this.glProgram, fragmentShader.glShader);
 
-  gl.bindAttribLocation(this.glProgram, 0, 'vertexPosition');
-  gl.bindAttribLocation(this.glProgram, 1, 'vertexColor');
-  gl.bindAttribLocation(this.glProgram, 2, 'modelViewProjMatrix');
+  // gl.bindAttribLocation(this.glProgram, 0, 'vertexPosition');
+  // gl.bindAttribLocation(this.glProgram, 1, 'color');
+  // gl.bindAttribLocation(this.glProgram, 2, 'modelViewProjMatrix');
+  // gl.bindAttribLocation(this.glProgram, 2, 'elapsedTime');
   // gl.bindAttribLocation(this.glProgram, 3, 'brightness');
 
   gl.linkProgram(this.glProgram);

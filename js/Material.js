@@ -18,7 +18,7 @@ const Material = function(gl, program) {
             name + "'. Is '" + name + "' an unused uniform?" );
         return Material.dummy;
       } 
-      return target[name]; 
+      return target[name];
     }, 
   });
 };

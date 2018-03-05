@@ -3,8 +3,8 @@ const StarGeometry = function(gl) {
   this.gl = gl;
 
   // vertex buffer
-  let r1 = 1;
-  let r2 = 0.4;
+  var r1 = 1;
+  var r2 = 0.4;
   let ti = 1.57079632679; // pi/2
   let ro = 0.62831853071; // 2pi / 10
   var points = [0, 0, 0.5];
@@ -19,17 +19,6 @@ const StarGeometry = function(gl) {
   gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
   gl.bufferData(gl.ARRAY_BUFFER,
     new Float32Array(points),
-    gl.STATIC_DRAW);
-
-  // vertex color buffer
-  this.vertexColorBuffer = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexColorBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER,
-    new Float32Array([
-      0.01,0.26,0.55,
-      1.00,0.60,0.00,
-      0.44,0.85,0.61,
-    ]),
     gl.STATIC_DRAW);
 
   // index buffer
@@ -58,15 +47,6 @@ StarGeometry.prototype.draw = function() {
   gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
   gl.enableVertexAttribArray(0);
   gl.vertexAttribPointer(0,
-    3, gl.FLOAT, //< three pieces of float
-    false, //< do not normalize (make unit length)
-    0, //< tightly packed
-    0 //< data starts at array start
-  );
-
-  gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexColorBuffer);
-  gl.enableVertexAttribArray(1);
-  gl.vertexAttribPointer(1,
     3, gl.FLOAT, //< three pieces of float
     false, //< do not normalize (make unit length)
     0, //< tightly packed

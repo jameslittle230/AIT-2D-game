@@ -1,0 +1,12 @@
+Shader.source[document.currentScript.src.split('js/shaders/')[1]] = `
+	precision highp float;
+	uniform float timeElapsed;
+	uniform vec3 color;
+
+	void main(void) {
+		float r = (sin(timeElapsed) * 127.5 + (255.0 - 127.5))/255.0;
+		float g = 57.0/255.0;
+		float b = 105.0/255.0;
+		gl_FragColor = vec4(color, 1);
+	}
+`;
