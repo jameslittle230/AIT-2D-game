@@ -1,10 +1,10 @@
 const OrthoCamera = function() { 
-    this.position = new Vec2(0.5, 0); 
+    this.position = new Vec2(0, 0);
     this.rotation = 0; 
     this.windowSize = new Vec2(2, 2); 
     
-    this.viewProjMatrix = new Mat4(); 
-    this.updateViewProjMatrix(); 
+    this.viewProjMatrix = new Mat4();
+    this.updateViewProjMatrix();
 };
 
 OrthoCamera.prototype.updateViewProjMatrix = function() {

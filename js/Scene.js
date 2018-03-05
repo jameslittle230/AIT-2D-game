@@ -6,8 +6,6 @@ const Scene = function(gl) {
   this.buildHeartObject(gl);
   this.buildStarObject(gl);
 
-  // this.starGeometry = new StarGeometry(gl);
-
   this.timeAtLastFrame = new Date().getTime();
 
   this.elapsedTime = 0;
@@ -45,7 +43,7 @@ Scene.prototype.update = function(gl, keysPressed) {
   //   console.log("Could not find uniform");
   // } else {
     this.gameObjects.forEach(gameObj => {
-      gameObj.draw();
+      gameObj.draw(this.camera);
     });
   // }
 };
