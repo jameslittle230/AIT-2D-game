@@ -4,6 +4,7 @@ const App = function(canvas, overlay) {
 	this.canvas = canvas;
 	this.overlay = overlay;
 	this.keysPressed = [];
+	this.dragInProgress = false;
 
 	// if no GL support, cry
 	this.gl = canvas.getContext("experimental-webgl");
@@ -38,17 +39,26 @@ App.prototype.registerEventHandlers = function() {
 		var x = (event.x / theApp.canvas.width - 0.5) * 2;
 		var y = (event.y / theApp.canvas.height - 0.5) * -2;
 
-		theApp.scene.click(x, y);
+		theApp.dragInProgress = true;
+		theApp.scene.dragStart(x, y);
 	};
 	this.canvas.onmousemove = function(event) {
-		//jshint unused:false
 		event.stopPropagation();
+		if(theApp.dragInProgress) {
+			var x = (event.x / theApp.canvas.width - 0.5) * 2;
+			var y = (event.y / theApp.canvas.height - 0.5) * -2;
+			theApp.scene.dragMove(x, y)
+		}
 	};
 	this.canvas.onmouseout = function(event) {
 		//jshint unused:false
 	};
 	this.canvas.onmouseup = function(event) {
-		//jshint unused:false
+		var x = (event.x / theApp.canvas.width - 0.5) * 2;
+		var y = (event.y / theApp.canvas.height - 0.5) * -2;
+
+		theApp.dragInProgress = false;
+		theApp.scene.dragEnd(x, y);
 	};
 	window.addEventListener('resize', function() {
 		theApp.resize();

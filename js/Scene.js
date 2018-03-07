@@ -24,9 +24,9 @@ const Scene = function(gl) {
       var obj;
       var random = Math.floor((Math.random() * 7) + 1);
       if(j%2 == i%2) {
-        obj = new GameObject(new Mesh(this.heartGeometry, this.heartMaterial));
+        obj = new GameObject(new Mesh(this.heartGeometry, this.heartMaterial), "heart");
       } else {
-        obj = new GameObject(new Mesh(this.starGeometry, this.starMaterial));
+        obj = new GameObject(new Mesh(this.starGeometry, this.starMaterial), "star");
       }
       obj.position.add(j, i, 0);
       row.push(obj);
@@ -67,7 +67,36 @@ Scene.prototype.update = function(gl, keysPressed) {
   }
 };
 
-Scene.prototype.click = function(x, y) {
+Scene.prototype.dragStart = function(x, y) {
+  // Take click coordinates (in [-1, 1], y upwards) and normalize to camera
+  var clickVector = new Vec3(x, y, 0);
+  var camInverse = this.camera.viewProjMatrix.clone().invert();
+  clickVector = clickVector.xyz1times(camInverse);
+  var x = Math.round(clickVector.x);
+  var y = Math.round(clickVector.y);
+
+  console.log(x, y);
+
+  if((0<=x && x<10) && (0<=y && y<10)) {
+    this.selected = {
+      x: x,
+      y: y,
+      space: this.board[y][x]
+    };
+    this.selected.space.isSelected = true;
+  }
+};
+
+Scene.prototype.dragMove = function(x, y) {
+  // Take click coordinates (in [-1, 1], y upwards) and normalize to camera
+  var clickVector = new Vec3(x, y, 0);
+  var camInverse = this.camera.viewProjMatrix.clone().invert();
+  clickVector = clickVector.xyz1times(camInverse);
+  var x = Math.round(clickVector.x);
+  var y = Math.round(clickVector.y);
+}
+
+Scene.prototype.dragEnd = function(x, y) {
   // Take click coordinates (in [-1, 1], y upwards) and normalize to camera
   var clickVector = new Vec3(x, y, 0);
   var camInverse = this.camera.viewProjMatrix.clone().invert();
@@ -88,26 +117,39 @@ Scene.prototype.click = function(x, y) {
         this.board[this.selected.y][this.selected.x] = this.board[y][x];
         this.board[y][x] = temp;
 
-        // Deselect space
-        this.selected.space.isSelected = false;
-        this.selected = null;
-
-        // Return so swapped space doesn't get selected
-        return;
+        if(!this.checkLegal()) {
+          // Swap back
+          var temp = this.board[this.selected.y][this.selected.x];
+          this.board[this.selected.y][this.selected.x] = this.board[y][x];
+          this.board[y][x] = temp;
+        }
     }
 
-    // If we want to select a new space (not adjacent), deselect current space
+    // Deselect space
     this.selected.space.isSelected = false;
+    this.selected = null;
+  }
+}
+
+Scene.prototype.checkLegal = function() {
+  for(var i=0; i<10; i++) {
+    for(var j=0; j<7; j++) {
+      if(this.board[i][j].type === this.board[i][j+1].type && this.board[i][j].type === this.board[i][j+2].type) {
+        return true;
+      }
+    }
   }
 
-  // and select the space we clicked on
-  this.selected = {
-    x: x,
-    y: y,
-    space: this.board[y][x]
-  };
-  this.selected.space.isSelected = true;
-};
+  for(var i=0; i<7; i++) {
+    for(var j=0; j<10; j++) {
+      if(this.board[i][j].type === this.board[i+1][j].type && this.board[i][j].type === this.board[i+1][j].type) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
 
 Scene.prototype.buildHeartObject = function(gl) {
   this.heartFS = new Shader(gl, gl.FRAGMENT_SHADER, "heart_fs.essl");

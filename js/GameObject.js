@@ -1,6 +1,7 @@
 "use strict"; 
-const GameObject = function(mesh) {
+const GameObject = function(mesh, type) {
     this.mesh = mesh;
+    this.type = type;
 
     this.position = new Vec3(0, 0, 0);
     this.orientation = 0;
