@@ -61,7 +61,7 @@ Scene.prototype.update = function(gl, keysPressed) {
 
   for(var i=0; i<10; i++) {
     for(var j=0; j<10; j++) {
-      this.board[i][j].position = new Vec3(j, i, 0);
+      // this.board[i][j].position = new Vec3(j, i, 0);
       this.board[i][j].draw(this.camera);
     }
   }
@@ -92,8 +92,10 @@ Scene.prototype.dragMove = function(x, y) {
   var clickVector = new Vec3(x, y, 0);
   var camInverse = this.camera.viewProjMatrix.clone().invert();
   clickVector = clickVector.xyz1times(camInverse);
-  var x = Math.round(clickVector.x);
-  var y = Math.round(clickVector.y);
+  var x = clickVector.x;
+  var y = clickVector.y;
+
+  this.selected.space.position.set(x, y, 0.5);
 }
 
 Scene.prototype.dragEnd = function(x, y) {
@@ -108,24 +110,30 @@ Scene.prototype.dragEnd = function(x, y) {
   // a swap
   if(this.selected !== null) {
 
+    var sx = this.selected.x;
+    var sy = this.selected.y;
+
     // Check if selected space is adjacent: some tricky abs value logic here
-    if((Math.abs(this.selected.x - x) === 1 && this.selected.y === y) ||
-       (Math.abs(this.selected.y - y) === 1 && this.selected.x === x)) {
+    if((Math.abs(sx - x) === 1 && sy === y) ||
+       (Math.abs(sy - y) === 1 && sx === x)) {
 
         // Swap spaces in memory
         var temp = this.selected.space;
-        this.board[this.selected.y][this.selected.x] = this.board[y][x];
+        this.board[sy][sx] = this.board[y][x];
         this.board[y][x] = temp;
 
         if(!this.checkLegal()) {
           // Swap back
-          var temp = this.board[this.selected.y][this.selected.x];
-          this.board[this.selected.y][this.selected.x] = this.board[y][x];
+          var temp = this.board[sy][sx];
+          this.board[sy][sx] = this.board[y][x];
           this.board[y][x] = temp;
         }
+
+        this.board[y][x].position.set(x, y, 0.5);
     }
 
     // Deselect space
+    this.board[sy][sx].position.set(sx, sy, 0.5);
     this.selected.space.isSelected = false;
     this.selected = null;
   }
