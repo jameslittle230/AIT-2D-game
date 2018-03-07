@@ -32,15 +32,27 @@ App.prototype.registerEventHandlers = function() {
 	document.onkeydown = function(event) {
 		theApp.keysPressed[keyboardMap[event.keyCode]] = true;
 	};
+
 	document.onkeyup = function(event) {
 		theApp.keysPressed[keyboardMap[event.keyCode]] = false;
 	};
+
+	document.addEventListener('contextmenu', function(e){
+		e.preventDefault();
+	}, false);
+
 	this.canvas.onmousedown = function(event) {
 		var x = (event.x / theApp.canvas.width - 0.5) * 2;
 		var y = (event.y / theApp.canvas.height - 0.5) * -2;
 
-		theApp.dragInProgress = true;
-		theApp.scene.dragStart(x, y);
+		if(event.which == 3) {
+			event.preventDefault();
+			event.stopPropagation();
+			theApp.scene.bombAttempt(x, y);
+		} else {
+			theApp.dragInProgress = true;
+			theApp.scene.dragStart(x, y);
+		}
 	};
 	this.canvas.onmousemove = function(event) {
 		event.stopPropagation();
