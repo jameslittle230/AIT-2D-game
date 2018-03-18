@@ -30,11 +30,15 @@ App.prototype.resize = function() {
 App.prototype.registerEventHandlers = function() {
 	const theApp = this;
 	document.onkeydown = function(event) {
-		theApp.keysPressed[keyboardMap[event.keyCode]] = true;
+		if(keyboardMap[event.keyCode] == "Q") {
+			theApp.scene.quaking = true;
+		}
 	};
 
 	document.onkeyup = function(event) {
-		theApp.keysPressed[keyboardMap[event.keyCode]] = false;
+		if(keyboardMap[event.keyCode] == "Q") {
+			theApp.scene.quaking = false;
+		}
 	};
 
 	document.addEventListener('contextmenu', function(e){
